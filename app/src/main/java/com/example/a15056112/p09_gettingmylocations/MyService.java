@@ -33,6 +33,7 @@ public class MyService extends Service implements GoogleApiClient.OnConnectionFa
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
+    String folderLocation;
 
     public MyService() {
     }
@@ -48,13 +49,24 @@ public class MyService extends Service implements GoogleApiClient.OnConnectionFa
         super.onCreate();
         Log.d("Service","Created");
 
-
+        folderLocation = Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + "/P09";
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        File folder = new File(folderLocation);
+        if (folder.exists() == false){
+            boolean result = folder.mkdir();
+            if (result == true){
+                Log.d("File Read/Write", "Folder created");
+                Toast.makeText(MyService.this, "P09 Folder has been created", Toast.LENGTH_SHORT).show();
+            }
+        }
+
 
     }
 
@@ -128,8 +140,7 @@ public class MyService extends Service implements GoogleApiClient.OnConnectionFa
     public void onLocationChanged(Location location) {
         String details = location.getLatitude() + "," + location.getLongitude();
 
-        String folderLocation = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/Test";
+
 
         File targetFile = new File(folderLocation, "data.txt");
 

@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -97,8 +98,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View v) {
 
+                Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
+                startActivity(recordIntent);
+
                 String folderLocation = Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + "/Test";
+                        .getAbsolutePath() + "/P09";
                 File targetFile = new File(folderLocation, "data.txt");
 
                 if (targetFile.exists() == true){
@@ -186,6 +190,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Toast.makeText(this, "Location not Detected",
                     Toast.LENGTH_SHORT).show();
         }
+
+        LatLng poi_currentLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+        Marker cp = map.addMarker(new
+                MarkerOptions()
+                .position(poi_currentLocation)
+                .title("Current Location")
+                .snippet("Currently over here")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
     @Override
